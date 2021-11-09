@@ -5,7 +5,7 @@ namespace ConsoleGrilledEel
 {
     class Program
     {
-        class DirectionInfo { public char Direction; public bool Reviewed; }
+        class DirectionInfo { public char Direction; public bool Changed; }
 
         static void Main(string[] args)
         {
@@ -29,7 +29,7 @@ namespace ConsoleGrilledEel
                 if (0.Equals(step))
                 {
                     // 最初の移動
-                    directionList.Add(new DirectionInfo() { Direction = AdditionDirection, Reviewed = false });
+                    directionList.Add(new DirectionInfo() { Direction = AdditionDirection, Changed = false });
                     remains += moveList[step];
                     step++;
                 }
@@ -55,7 +55,7 @@ namespace ConsoleGrilledEel
                         if (step < directionList.Count)
                         {
                             // 既に1度移動方向を決めていた
-                            if (directionList[step].Reviewed)
+                            if (directionList[step].Changed)
                             {
                                 // 既に1度決めた移動方向を見直している → 1つ前の移動方向の見直しへ
                                 if (AdditionDirection.Equals(directionList[step - 1].Direction))
@@ -74,7 +74,7 @@ namespace ConsoleGrilledEel
                                 if (AdditionDirection.Equals(directionList[step].Direction))
                                 {
                                     // 左方向へ変更を試みる
-                                    directionList[step].Reviewed = true;
+                                    directionList[step].Changed = true;
                                     if (remains < moveList[step])
                                     {
                                         // 左方向へ変更不可 → 1つ前の移動方向の見直しへ
@@ -100,7 +100,7 @@ namespace ConsoleGrilledEel
                                 else
                                 {
                                     // 右方向へ変更を試みる
-                                    directionList[step].Reviewed = true;
+                                    directionList[step].Changed = true;
                                     if (maxBlockNo < remains + moveList[step])
                                     {
                                         // 右方向へ変更不可 → 1つ前の移動方向の見直しへ
@@ -144,14 +144,14 @@ namespace ConsoleGrilledEel
                             else if (remains + moveList[step] <= maxBlockNo)
                             {
                                 // 右方向へ移動可能 → 右方向へ移動し次へ
-                                directionList.Add(new DirectionInfo() { Direction = AdditionDirection, Reviewed = false });
+                                directionList.Add(new DirectionInfo() { Direction = AdditionDirection, Changed = false });
                                 remains += moveList[step];
                                 step++;
                             }
                             else
                             {
                                 // 左方向へ移動可能 → 左方向へ移動し次へ
-                                directionList.Add(new DirectionInfo() { Direction = SubtractionDirection, Reviewed = false });
+                                directionList.Add(new DirectionInfo() { Direction = SubtractionDirection, Changed = false });
                                 remains -= moveList[step];
                                 step++;
                             }
@@ -164,6 +164,8 @@ namespace ConsoleGrilledEel
             System.Text.StringBuilder result = new();
             directionList.ForEach(info => result.Append(info.Direction)); 
             Console.WriteLine(result.ToString());
+
+            Console.ReadKey();
         }
     }
 }
